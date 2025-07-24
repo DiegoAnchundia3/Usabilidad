@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Clases personalizadas adicionales */
+@layer base {
+  html,
+  body {
+    @apply m-0 p-0 w-full overflow-x-hidden;
+  }
+
+  body {
+    @apply min-h-screen;
+  }
+}
+
+@layer components {
+  /* Efectos de glassmorphism */
+  .glass-effect {
+    @apply backdrop-blur-xl bg-white/10 border border-white/20;
+  }
+
+  /* Botón con efecto hover avanzado */
+  .btn-hover-effect {
+    @apply relative overflow-hidden;
+  }
+
+  .btn-hover-effect::before {
+    content: '';
+    @apply absolute inset-0 bg-white/20 transform -translate-x-full transition-transform duration-300 ease-out;
+  }
+
+  .btn-hover-effect:hover::before {
+    @apply translate-x-0;
+  }
+
+  /* Input con animación de focus */
+  .input-focus-effect {
+    @apply relative;
+  }
+
+  .input-focus-effect::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500 transition-all duration-300;
+  }
+
+  .input-focus-effect:focus-within::after {
+    @apply w-full;
+  }
+
+  /* Estados de accesibilidad */
+  .high-contrast-mode {
+    @apply contrast-150;
+  }
+
+  .mono-mode {
+    @apply grayscale;
+  }
+
+  .reduce-motion * {
+    @apply motion-reduce:animate-none motion-reduce:transition-none;
+  }
+}
+
+@layer utilities {
+  /* Utilidades personalizadas */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent;
+  }
+
+  .shadow-glow {
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+  }
+
+  .shadow-glow-strong {
+    box-shadow: 0 0 40px rgba(102, 126, 234, 0.5);
+  }
+}

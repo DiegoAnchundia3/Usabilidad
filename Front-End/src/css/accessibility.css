@@ -1,0 +1,536 @@
+/* =================== MÁSCARA Y GUÍA DE LECTURA =================== */
+.reading-mask-top, .reading-mask-bottom {
+  position: fixed;
+  left: 0;
+  width: 100vw;
+  background: rgba(0,0,0,0.7);
+  pointer-events: none;
+  z-index: 9999;
+}
+.reading-mask-top {
+  top: 0;
+}
+.reading-mask-bottom {
+  left: 0;
+  width: 100vw;
+  background: rgba(0,0,0,0.7);
+  pointer-events: none;
+  z-index: 9999;
+}
+.reading-guide {
+  height: 4px;
+  background: linear-gradient(90deg, #7c3aed 0%, #38bdf8 100%);
+  opacity: 0.85;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 10000;
+}
+/* =================== MÁSCARA Y GUÍA DE LECTURA =================== */
+.reading-mask-top, .reading-mask-bottom {
+  position: fixed;
+  left: 0;
+  width: 100vw;
+  background: rgba(0,0,0,0.7);
+  pointer-events: none;
+  z-index: 9999;
+}
+.reading-mask-top {
+  top: 0;
+}
+.reading-mask-bottom {
+  left: 0;
+  width: 100vw;
+  background: rgba(0,0,0,0.7);
+  pointer-events: none;
+  z-index: 9999;
+}
+.reading-guide {
+  height: 4px;
+  background: linear-gradient(90deg, #7c3aed 0%, #38bdf8 100%);
+  opacity: 0.85;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 10000;
+}
+/* ==========================================   PREVENCIÓN DE DOBLE SCROLL   ========================================== */
+/* Prevenir scroll del body cuando el menú está abierto */
+body.accessibility-menu-open {
+  overflow: hidden !important;
+  padding-right: 0 !important;
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+body.accessibility-menu-open > *:not(.accessibility-button):not(.accessibility-overlay):not(.accessibility-sidebar) {
+  pointer-events: none !important;
+}
+.accessibility-button {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  z-index: 9999 !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 50% !important;
+  width: 60px !important;
+  height: 60px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  font-family: "Inter", system-ui, -apple-system, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+}
+.accessibility-button:hover {
+  transform: scale(1.1) rotate(90deg) !important;
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6) !important;
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%) !important;
+}
+/* Overlay de fondo oscuro */
+.accessibility-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  z-index: 9998 !important;
+  backdrop-filter: blur(2px) !important;
+  opacity: 0 !important;
+  transition: opacity 0.3s ease !important;
+}
+.accessibility-overlay.fade-in {
+  opacity: 1 !important;
+}
+.accessibility-overlay.fade-out {
+  opacity: 0 !important;
+}
+/* Sidebar principal - POSICIONAMIENTO LATERAL */
+.accessibility-sidebar {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  width: 420px !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+  border-left: 3px solid transparent !important;
+  border-image: linear-gradient(180deg, #667eea, #764ba2) 1 !important;
+  box-shadow: -15px 0 50px rgba(0, 0, 0, 0.2) !important;
+  z-index: 10000 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 25px 20px 20px 20px !important;
+  font-family: "Inter", system-ui, -apple-system, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+  color: #1e293b !important;
+  backdrop-filter: blur(10px) !important;
+  transform: translateX(100%) !important;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+/* Asegurar que todos los elementos del sidebar sean clicables */
+.accessibility-sidebar,
+.accessibility-sidebar * {
+  pointer-events: auto !important;
+}
+/* Asegurar que el botón y overlay también funcionen */
+.accessibility-button,
+.accessibility-overlay {
+  pointer-events: auto !important;
+}
+/* Animaciones del sidebar */
+.accessibility-sidebar.slide-in {
+  transform: translateX(0) !important;
+}
+.accessibility-sidebar.slide-out {
+  transform: translateX(100%) !important;
+}
+/* Scroll personalizado */
+.accessibility-sidebar::-webkit-scrollbar {
+  width: 8px !important;
+}
+.accessibility-sidebar::-webkit-scrollbar-track {
+  background: rgba(226, 232, 240, 0.3) !important;
+  border-radius: 4px !important;
+}
+.accessibility-sidebar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #667eea, #764ba2) !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease !important;
+}
+.accessibility-sidebar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #5a67d8, #553c9a) !important;
+}
+/* Botón de cerrar */
+.accessibility-close-button {
+  position: absolute !important;
+  top: 18px !important;
+  right: 18px !important;
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 50% !important;
+  width: 36px !important;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  font-family: "Inter", system-ui, -apple-system, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3) !important;
+}
+.accessibility-close-button:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+  transform: scale(1.1) rotate(90deg) !important;
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5) !important;
+}
+/* Títulos elegantes */
+.accessibility-sidebar h2 {
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #1e293b !important;
+  margin: 0 0 25px 0 !important;
+  padding-right: 50px !important;
+  font-family: "Inter", system-ui, -apple-system, sans-serif !important;
+  line-height: 1.3 !important;
+  background: linear-gradient(135deg, #667eea, #764ba2) !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+.accessibility-sidebar h3 {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+  margin: 25px 0 15px 0 !important;
+  padding: 12px 16px !important;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%) !important;
+  border-radius: 12px !important;
+  border-left: 4px solid #667eea !important;
+  font-family: "Inter", system-ui, -apple-system, sans-serif !important;
+  line-height: 1.4 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+}
+/* Tarjetas de opciones con glassmorphism */
+.accessibility-option-card {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  border-radius: 16px !important;
+  padding: 20px !important;
+  margin-bottom: 16px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+}
+.accessibility-option-card:hover {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(102, 126, 234, 0.3) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+}
+/* Opciones individuales */
+.accessibility-option {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 16px !important;
+  gap: 12px !important;
+  font-family: "Inter", system-ui, -apple-system, sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+.accessibility-option:last-child {
+  margin-bottom: 0 !important;
+}
+.accessibility-option label {
+  display: flex !important;
+  align-items: center !important;
+  font-weight: 500 !important;
+  color: #475569 !important;
+  cursor: pointer !important;
+  font-family: "Inter", system-ui, -apple-system, sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  min-width: 0 !important;
+  flex: 1 !important;
+  transition: color 0.2s ease !important;
+}
+.accessibility-option label:hover {
+  color: #667eea !important;
+}
+/* Controles de valor modernos */
+.value-display {
+  background: linear-gradient(135deg, #e2e8f0, #cbd5e1) !important;
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+  min-width: 50px !important;
+  text-align: center !important;
+  font-family: "Inter", system-ui, -apple-system, sans-serif !important;
+  line-height: 1.4 !important;
+  border: 1px solid rgba(226, 232, 240, 0.5) !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+/* Botones mejorados */
+.accessibility-sidebar button:not(.accessibility-close-button):not(.accessibility-button) {
+  font-family: "Inter", system-ui, -apple-system, sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border: none !important;
+  cursor: pointer !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+}
+.accessibility-sidebar button:not(.accessibility-close-button):not(.accessibility-button):hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+/* Botones de incremento/decremento */
+.accessibility-sidebar .bg-blue-500 {
+  background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+  color: white !important;
+  padding: 8px 12px !important;
+  min-width: 32px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.accessibility-sidebar .bg-blue-500:hover {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+}
+/* Asegurar interactividad completa de todos los controles */
+.accessibility-sidebar button,
+.accessibility-sidebar input,
+.accessibility-sidebar select,
+.accessibility-sidebar label,
+.accessibility-sidebar [role="button"] {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+}
+/* Asegurar que los elementos clicables tengan feedback visual */
+.accessibility-sidebar button:hover,
+.accessibility-sidebar input:hover,
+.accessibility-sidebar select:hover,
+.accessibility-sidebar label:hover {
+  opacity: 0.9 !important;
+  transform: translateY(-1px) !important;
+}
+/* Inputs y selects modernos */
+.accessibility-sidebar input[type="checkbox"] {
+  margin-right: 8px !important;
+  width: 18px !important;
+  height: 18px !important;
+  cursor: pointer !important;
+  accent-color: #667eea !important;
+  border-radius: 4px !important;
+}
+.accessibility-sidebar input[type="range"] {
+  flex: 1 !important;
+  margin: 0 8px !important;
+  cursor: pointer !important;
+  accent-color: #667eea !important;
+  height: 6px !important;
+  border-radius: 3px !important;
+}
+.accessibility-sidebar select {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  font-family: "Inter", system-ui, -apple-system, sans-serif !important;
+  line-height: 1.5 !important;
+  transition: all 0.2s ease !important;
+  backdrop-filter: blur(10px) !important;
+}
+.accessibility-sidebar select:focus {
+  outline: 2px solid #667eea !important;
+  outline-offset: 2px !important;
+  border-color: #667eea !important;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
+}
+/* Botones de alineación */
+.accessibility-sidebar .bg-gray-200 {
+  background: rgba(226, 232, 240, 0.7) !important;
+  color: #64748b !important;
+  padding: 8px !important;
+  width: 36px !important;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.accessibility-sidebar .bg-gray-200:hover {
+  background: rgba(203, 213, 225, 0.9) !important;
+}
+/* Botón de reset especial */
+.accessibility-sidebar .bg-red-500 {
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  color: white !important;
+  padding: 12px 20px !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3) !important;
+}
+.accessibility-sidebar .bg-red-500:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4) !important;
+}
+/* Responsividad para móviles */
+@media (max-width: 768px) {
+  .accessibility-sidebar {
+    width: 100vw !important;
+    padding: 20px 15px !important;
+    transform: translateX(100%) !important;
+  }
+  .accessibility-button {
+    width: 50px !important;
+    height: 50px !important;
+    top: 15px !important;
+    right: 15px !important;
+  }
+  .accessibility-option {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+  .accessibility-option label {
+    width: 100% !important;
+  }
+  .accessibility-option-card {
+    padding: 16px !important;
+  }
+}
+@media (max-width: 480px) {
+  .accessibility-sidebar h2 {
+    font-size: 20px !important;
+  }
+  .accessibility-sidebar h3 {
+    font-size: 14px !important;
+    padding: 10px 12px !important;
+  }
+}
+/* ==========================================   ESTILOS DE ACCESIBILIDAD PARA EL CONTENIDO   (Solo afectan elementos fuera del menú)   ========================================== */
+/* Tamaño de fuente dinámico */
+body:not(.accessibility-menu) *:not([class*="accessibility-"]) {
+  font-size: var(--accessibility-font-size, inherit) !important;
+  line-height: var(--accessibility-line-height, inherit) !important;
+  letter-spacing: var(--accessibility-letter-spacing, normal) !important;
+}
+/* Contraste alto mejorado */
+body.accessibility-contrast-high *:not([class*="accessibility-"]) {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+  border-color: #000000 !important;
+  text-shadow: none !important;
+  box-shadow: 0 0 0 1px #000000 !important;
+}
+body.accessibility-contrast-high input:not([class*="accessibility-"]),
+body.accessibility-contrast-high select:not([class*="accessibility-"]),
+body.accessibility-contrast-high textarea:not([class*="accessibility-"]),
+body.accessibility-contrast-high button:not([class*="accessibility-"]) {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+}
+/* Contraste invertido mejorado */
+body.accessibility-contrast-inverted *:not([class*="accessibility-"]) {
+  color: #ffffff !important;
+  background-color: #000000 !important;
+  border-color: #ffffff !important;
+  text-shadow: none !important;
+  box-shadow: 0 0 0 1px #ffffff !important;
+}
+body.accessibility-contrast-inverted input:not([class*="accessibility-"]),
+body.accessibility-contrast-inverted select:not([class*="accessibility-"]),
+body.accessibility-contrast-inverted textarea:not([class*="accessibility-"]),
+body.accessibility-contrast-inverted button:not([class*="accessibility-"]) {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+}
+/* Resaltar enlaces */
+body.accessibility-highlight-links a:not([class*="accessibility-"]) {
+  background: #ffff00 !important;
+  color: #000000 !important;
+  text-decoration: underline !important;
+  font-weight: bold !important;
+  padding: 2px 4px !important;
+  border-radius: 2px !important;
+}
+/* Agrandar texto */
+body.accessibility-enlarge-text *:not([class*="accessibility-"]) {
+  font-size: 1.2em !important;
+}
+/* Ocultar imágenes */
+body.accessibility-hide-images img:not([class*="accessibility-"]) {
+  display: none !important;
+}
+/* Fuente amigable para dislexia */
+body.accessibility-dyslexia-friendly *:not([class*="accessibility-"]) {
+  font-family: "OpenDyslexic", "Comic Sans MS", cursive !important;
+}
+/* Pausar animaciones */
+body.accessibility-pause-animations *:not([class*="accessibility-"]) {
+  animation: none !important;
+  transition: none !important;
+}
+/* Alineación de texto */
+body.accessibility-text-align-center *:not([class*="accessibility-"]) {
+  text-align: center !important;
+}
+body.accessibility-text-align-right *:not([class*="accessibility-"]) {
+  text-align: right !important;
+}
+/* Cursores mejorados con sombras */
+body.accessibility-cursor-large *:not([class*="accessibility-"]) {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="shadow"><feDropShadow dx="1" dy="1" stdDeviation="1" flood-color="rgba(0,0,0,0.5)"/></filter></defs><path d="M2 2v28l10-10h18V2H2z" fill="white" stroke="black" stroke-width="1" filter="url(%23shadow)"/></svg>')
+    2 2, auto !important;
+}
+body.accessibility-cursor-large button:not([class*="accessibility-"]),
+body.accessibility-cursor-large a:not([class*="accessibility-"]),
+body.accessibility-cursor-large [role="button"]:not([class*="accessibility-"]) {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="shadow"><feDropShadow dx="1" dy="1" stdDeviation="1" flood-color="rgba(0,0,0,0.5)"/></filter></defs><circle cx="16" cy="16" r="14" fill="white" stroke="black" stroke-width="2" filter="url(%23shadow)"/><path d="M12 16l4 4 8-8" stroke="black" stroke-width="2" fill="none"/></svg>')
+    16 16, pointer !important;
+}
+body.accessibility-cursor-large input:not([class*="accessibility-"]),
+body.accessibility-cursor-large textarea:not([class*="accessibility-"]) {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="shadow"><feDropShadow dx="1" dy="1" stdDeviation="1" flood-color="rgba(0,0,0,0.5)"/></filter></defs><rect x="14" y="4" width="4" height="24" fill="white" stroke="black" stroke-width="1" filter="url(%23shadow)"/><rect x="10" y="4" width="12" height="4" fill="white" stroke="black" stroke-width="1" filter="url(%23shadow)"/><rect x="10" y="24" width="12" height="4" fill="white" stroke="black" stroke-width="1" filter="url(%23shadow)"/></svg>')
+    16 16, text !important;
+}
+body.accessibility-cursor-extra-large *:not([class*="accessibility-"]) {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><defs><filter id="shadow"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.7)"/></filter></defs><path d="M3 3v42l15-15h27V3H3z" fill="white" stroke="black" stroke-width="2" filter="url(%23shadow)"/></svg>')
+    3 3, auto !important;
+}
+body.accessibility-cursor-extra-large button:not([class*="accessibility-"]),
+body.accessibility-cursor-extra-large a:not([class*="accessibility-"]),
+body.accessibility-cursor-extra-large [role="button"]:not([class*="accessibility-"]) {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><defs><filter id="shadow"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.7)"/></filter></defs><circle cx="24" cy="24" r="20" fill="white" stroke="black" stroke-width="3" filter="url(%23shadow)"/><path d="M16 24l6 6 12-12" stroke="black" stroke-width="3" fill="none"/></svg>')
+    24 24, pointer !important;
+}
+body.accessibility-cursor-extra-large input:not([class*="accessibility-"]),
+body.accessibility-cursor-extra-large textarea:not([class*="accessibility-"]) {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><defs><filter id="shadow"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.7)"/></filter></defs><rect x="20" y="6" width="8" height="36" fill="white" stroke="black" stroke-width="2" filter="url(%23shadow)"/><rect x="14" y="6" width="20" height="8" fill="white" stroke="black" stroke-width="2" filter="url(%23shadow)"/><rect x="14" y="34" width="20" height="8" fill="white" stroke="black" stroke-width="2" filter="url(%23shadow)"/></svg>')
+    24 24, text !important;
+}
+/* Filtro de saturación */
+body.accessibility-saturation-filter *:not([class*="accessibility-"]) {
+  filter: saturate(var(--accessibility-saturation, 100%)) !important;
+}
