@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../hooks/useAuth';
 import { useNavigate, Link } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -30,6 +31,9 @@ import {
 import { DashboardService } from '../services/dashboard.service';
 import type { UserProfile } from '../types/user.types';
 import type { DashboardConfig, DashboardStats } from '../types/dashboard.types';
+import { SideMenu } from '../components/SideMenu';
+import AdminAnimalFilter from './AdminAnimalFilter';
+import AdminAnimalSearchFilter from './AdminAnimalSearchFilter';
 
 // Mapeo de iconos string a componentes
 const iconMap = {
@@ -62,12 +66,15 @@ const Dashboard: React.FC = () => {
   const [config, setConfig] = useState<DashboardConfig | null>(null);
   const [stats, setStats] = useState<DashboardStats[]>([]);
   const [animals, setAnimals] = useState<any[]>([]);
+  const [filteredAnimals, setFilteredAnimals] = useState<any[]>([]);
   const [medicalAlerts, setMedicalAlerts] = useState<any[]>([]);
   const [volunteerTasks, setVolunteerTasks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState('dashboard');
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
 
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   useEffect(() => {
     const loadDashboard = async () => {
@@ -102,6 +109,7 @@ const Dashboard: React.FC = () => {
 
         setStats(statsData);
         setAnimals(animalsData);
+        setFilteredAnimals(animalsData);
         setMedicalAlerts(alertsData);
         setVolunteerTasks(tasksData);
       } catch (error) {
@@ -114,7 +122,27 @@ const Dashboard: React.FC = () => {
     loadDashboard();
   }, [navigate]);
 
+  // Filtro propio para animales (solo admin)
+  const handleAdminAnimalSearchFilter = (filters: {
+    nombre: string;
+    especie: string;
+    estado: string;
+  }) => {
+    setFilteredAnimals(
+      animals.filter((animal) => {
+        const matchesNombre =
+          !filters.nombre ||
+          animal.nombre.toLowerCase().includes(filters.nombre.toLowerCase());
+        const matchesEspecie =
+          !filters.especie || animal.especie === filters.especie;
+        const matchesEstado = !filters.estado || animal.estado === filters.estado;
+        return matchesNombre && matchesEspecie && matchesEstado;
+      })
+    );
+  };
+
   const handleLogout = () => {
+    logout();
     DashboardService.logout();
     navigate('/login');
   };
@@ -184,101 +212,14 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900">
-      {/* Sidebar */}
-      <div className="fixed left-0 top-0 h-full w-64 bg-white/10 backdrop-blur-md border-r border-white/20 z-40">
-        <div className="p-6">
-          {/* Logo y título */}
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
-              <Heart className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-white font-bold text-lg">RefugioApp</h1>
-              <p className="text-blue-200 text-xs">{config.title}</p>
-            </div>
-          </div>
-
-          {/* Información del usuario */}
-          <div className="bg-white/5 rounded-lg p-4 mb-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-sm">
-                  {user.nombre.charAt(0)}
-                  {user.apellido.charAt(0)}
-                </span>
-              </div>
-              <div>
-                <p className="text-white font-medium text-sm">
-                  {user.nombre} {user.apellido}
-                </p>
-                <p className="text-blue-200 text-xs capitalize">
-                  {user.tipoUsuario}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Menú de navegación */}
-          <nav className="space-y-2">
-            {config.menuItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => setActiveSection(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
-                  activeSection === item.id
-                    ? 'bg-white/20 text-white'
-                    : 'text-white/70 hover:bg-white/10 hover:text-white'
-                }`}
-              >
-                {getIcon(item.icon)}
-                <span className="font-medium">{item.title}</span>
-                {item.badge && (
-                  <span className="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            ))}
-          </nav>
-        </div>
-
-        {/* Logout */}
-        <div className="absolute bottom-6 left-6 right-6 space-y-2">
-          <Link
-            to="/demo"
-            className="w-full flex items-center gap-3 px-4 py-3 text-blue-300 hover:bg-blue-500/10 hover:text-blue-200 rounded-lg transition-all duration-200 border border-blue-500/30"
-          >
-            <Settings className="w-5 h-5" />
-            <span className="font-medium">Demo Accesibilidad</span>
-          </Link>
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/10 hover:text-white rounded-lg transition-all duration-200"
-          >
-            <LogOut className="w-5 h-5" />
-            <span className="font-medium">Cerrar Sesión</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Contenido principal */}
-      <div className="ml-64 min-h-screen">
+    <div className="min-h-screen flex bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900">
+      <SideMenu />
+      <div className="flex-1 min-h-screen">
         {/* Header */}
-        <header className="bg-white/10 backdrop-blur-md border-b border-white/20 p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-white">{config.title}</h1>
-              <p className="text-blue-200">{config.subtitle}</p>
-            </div>
-            <div className="flex items-center gap-4">
-              <button className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all">
-                <Search className="w-5 h-5" />
-              </button>
-              <button className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all">
-                <Bell className="w-5 h-5" />
-              </button>
-            </div>
+        <header className="bg-white/10 backdrop-blur-md border-b border-white/20 pt-12 pb-6 px-6">
+          <div className="flex flex-col items-center justify-center">
+            <h1 className="text-5xl font-extrabold text-white text-center mb-2 drop-shadow-lg">{config.title}</h1>
+            <p className="text-blue-200 text-lg text-center mb-2">{config.subtitle}</p>
           </div>
         </header>
 
@@ -320,16 +261,17 @@ const Dashboard: React.FC = () => {
 
           {/* Acciones rápidas */}
           <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
-            <h2 className="text-xl font-bold text-white mb-4">
+            <h2 className="text-xl font-bold text-white mb-4 text-center">
               Acciones Rápidas
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full justify-center">
               {config.quickActions.map((action) => (
                 <button
                   key={action.id}
                   className={`p-4 bg-gradient-to-r ${getStatColor(
                     action.color
-                  )} rounded-lg text-white text-left hover:scale-105 transition-transform duration-200`}
+                  )} rounded-lg text-white text-left hover:scale-105 transition-transform duration-200 w-full md:w-auto`}
+                  onClick={() => navigate(action.route)}
                 >
                   <div className="flex items-center gap-3 mb-2">
                     {getIcon(action.icon)}
@@ -354,8 +296,11 @@ const Dashboard: React.FC = () => {
                     ? 'Mis Animales'
                     : 'Animales Disponibles'}
                 </h2>
+                {user.tipoUsuario === 'administrador' && (
+                  <AdminAnimalSearchFilter onFilter={handleAdminAnimalSearchFilter} />
+                )}
                 <div className="space-y-3 max-h-80 overflow-y-auto">
-                  {animals.slice(0, 6).map((animal) => (
+                  {filteredAnimals.slice(0, 6).map((animal) => (
                     <div key={animal.id} className="bg-white/5 rounded-lg p-4">
                       <div className="flex items-center justify-between">
                         <div>

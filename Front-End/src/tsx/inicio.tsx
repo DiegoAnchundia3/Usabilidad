@@ -2,9 +2,9 @@
 
 import { useState } from "react"
 import { Header } from "../components/Header"
-import { SideMenu } from "../components/SideMenu"
 import { VisitorContent } from "../components/VisitorContent"
 import { VideoSection } from "../components/VideoSection"
+import VisitorMenu from "../components/VisitorMenu"
 
 export default function Inicio() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -16,9 +16,9 @@ export default function Inicio() {
         alt="Fondo de animales"
         className="absolute inset-0 w-full h-full object-contain z-0 opacity-50 blur-sm"
       />
+      <VisitorMenu open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <div className="relative z-10">
         <Header onMenuToggle={() => setIsMenuOpen(!isMenuOpen)} />
-        <SideMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
         <main className="container mx-auto px-4 py-8">
           {/* Sección Hero y Contenido Principal de Visitante */}
           <VisitorContent />

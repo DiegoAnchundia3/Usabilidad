@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
+import { useAuth } from "../hooks/useAuth"
 import { Link, useNavigate } from "react-router-dom"
 import { Eye, EyeOff, User, Lock, LogIn, Home, Settings } from "lucide-react"
 import { DashboardService } from "../services/dashboard.service"
@@ -23,6 +24,7 @@ const LoginPage: React.FC = () => {
   const [isBlocked, setIsBlocked] = useState(false)
   const [blockTimeLeft, setBlockTimeLeft] = useState(0)
   const navigate = useNavigate()
+  const { login } = useAuth()
 
   const validateForm = (): boolean => {
     const newErrors: { usuario?: string; contrasena?: string } = {}
@@ -45,9 +47,17 @@ const LoginPage: React.FC = () => {
     try {
       // Intentar hacer login usando el DashboardService
       const loginResult = await DashboardService.login(usuario, contrasena)
-      if (loginResult.success) {
-        console.log("Login exitoso")
-        navigate("/dashboard")
+      if (loginResult.success && loginResult.user) {
+        login({
+          name: loginResult.user.nombre,
+          email: loginResult.user.email,
+          tipoUsuario: loginResult.user.tipoUsuario,
+        })
+        if (loginResult.user.tipoUsuario === "administrador") {
+          navigate("/dashboard")
+        } else {
+          navigate("/")
+        }
       } else {
         const newAttempts = attempts + 1
         setAttempts(newAttempts)

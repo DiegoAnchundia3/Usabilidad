@@ -1,30 +1,101 @@
-// Esquema de Prisma para usuarios
-
 generator client {
-  provider = "prisma-client-js"
+	provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+	provider = "postgresql" // Cambia a tu motor de base de datos si es necesario
+	url      = env("DATABASE_URL")
 }
 
 model Usuario {
-  id        Int     @id @default(autoincrement())
-  usuario   String  @unique
-  email     String  @unique
-  password  String
-  rol       String
-  creadoEn  DateTime @default(now())
+	id            Int      @id @default(autoincrement())
+	nombre        String
+	apellido      String?
+	email         String   @unique
+	telefono      String?
+	tipoUsuario   String
+	estado        String
+	avatar        String?
+	password      String
+	fechaRegistro DateTime @default(now())
+	adopciones    Adopcion[]
+	donaciones    Donacion[]
+	voluntariados Voluntariado[]
+	registrosMedicos RegistroMedico[] @relation("VeterinarioRegistros")
+	hogaresTemporales HogarTemporal[]
 }
 
 model Animal {
-  id         Int      @id @default(autoincrement())
-  nombre     String
-  especie    String
-  edad       String
-  estado     String
-  historia   String?
-  imagenUrl  String?
-  creadoEn   DateTime @default(now())
+	id            Int      @id @default(autoincrement())
+	nombre        String
+	especie       String
+	raza          String?
+	edad          Int?
+	estado        String
+	fechaIngreso  DateTime @default(now())
+	descripcion   String?
+	foto          String?
+	adopciones    Adopcion[]
+	historias     HistoriaExito[]
+	registrosMedicos RegistroMedico[] @relation("AnimalRegistros")
+	hogaresTemporales HogarTemporal[]
+}
+
+model Adopcion {
+	id            Int      @id @default(autoincrement())
+	animal        Animal   @relation(fields: [animalId], references: [id])
+	animalId      Int
+	usuario       Usuario  @relation(fields: [usuarioId], references: [id])
+	usuarioId     Int
+	fechaAdopcion DateTime @default(now())
+	estado        String
+}
+
+model HistoriaExito {
+	id            Int      @id @default(autoincrement())
+	animal        Animal   @relation(fields: [animalId], references: [id])
+	animalId      Int
+	titulo        String
+	descripcion   String
+	fecha         DateTime @default(now())
+}
+
+model Donacion {
+	id            Int      @id @default(autoincrement())
+	usuario       Usuario  @relation(fields: [usuarioId], references: [id])
+	usuarioId     Int
+	monto         Float
+	fecha         DateTime @default(now())
+	tipo          String
+}
+
+model RegistroMedico {
+	id            Int      @id @default(autoincrement())
+	animal        Animal   @relation("AnimalRegistros", fields: [animalId], references: [id])
+	animalId      Int
+	veterinario   Usuario  @relation("VeterinarioRegistros", fields: [veterinarioId], references: [id])
+	veterinarioId Int
+	descripcion   String
+	fecha         DateTime @default(now())
+	tipo          String
+}
+
+model Voluntariado {
+	id            Int      @id @default(autoincrement())
+	usuario       Usuario  @relation(fields: [usuarioId], references: [id])
+	usuarioId     Int
+	actividad     String
+	fecha         DateTime @default(now())
+	estado        String
+}
+
+model HogarTemporal {
+	id            Int      @id @default(autoincrement())
+	animal        Animal   @relation(fields: [animalId], references: [id])
+	animalId      Int
+	usuario       Usuario  @relation(fields: [usuarioId], references: [id])
+	usuarioId     Int
+	fechaInicio   DateTime
+	fechaFin      DateTime?
+	estado        String
 }

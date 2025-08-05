@@ -1,10 +1,26 @@
 "use client"
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "./UI/card"
 import { Button } from "./UI/button"
 import { Heart, Calendar, MapPin, MessageCircle, ArrowRight, Phone, HandHeart } from "lucide-react"
+import { useState } from "react";
 import Mapa from "./UI/Mapa" // Importa tu componente Mapa
 
 export function VisitorContent() {
+  const [selectedAnimal, setSelectedAnimal] = useState<{
+    name: string;
+    age: string;
+    breed: string;
+    description: string;
+    image: string;
+    url: string;
+  } | null>(null);
+  const [selectedStory, setSelectedStory] = useState<{
+    title: string;
+    content: string;
+    image: string;
+  } | null>(null);
+  const navigate = useNavigate();
   const adoptedAnimals = [
     {
       name: "Baxter",
@@ -60,7 +76,7 @@ export function VisitorContent() {
             className="w-32 h-32 object-cover rounded-full mx-auto mb-6 filter drop-shadow-[0_0_20px_rgba(128,0,128,0.4)]"
           />
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Cada Patita de Gatito y Perrito Merece un Hogar Lleno de{" "}
+            Cada Patita de Gatito y Perrito Merece un Hogar Lleno de{' '}
             <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Amor</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8">
@@ -68,12 +84,8 @@ export function VisitorContent() {
             Cada historia importa, cada vida es valiosa.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button className="bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 text-white">
-              Conoce a Nuestros Animales
-            </Button>
-            <Button variant="outline" className="border-purple-500 text-purple-600 hover:bg-purple-50 bg-transparent">
-              Cómo Adoptar
-            </Button>
+            <Button className="bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 text-white" onClick={() => navigate("/perros-disponibles")}>Conoce a Nuestros Animales</Button>
+            <Button variant="outline" className="border-purple-500 text-purple-600 hover:bg-purple-50 bg-transparent" onClick={() => navigate("/proceso-adopcion")}>Cómo Adoptar</Button>
           </div>
         </div>
       </div>
@@ -81,13 +93,11 @@ export function VisitorContent() {
       {/* Featured Dogs */}
       <div className="mb-16 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Animales Adoptados Recientemente</h2>{" "}
-          {/* Changed text-white to text-gray-900 */}
+          <h2 className="text-2xl font-bold text-gray-900">Animales Adoptados Recientemente</h2>
           <Button variant="link" className="text-black hover:text-purple-200 flex items-center gap-1">
             Ver más historias <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {adoptedAnimals.map((animal, index) => (
             <Card
@@ -112,7 +122,7 @@ export function VisitorContent() {
                   <span>{animal.breed}</span>
                 </div>
                 <p className="text-gray-800 mb-4 text-shadow-xs">{animal.description}</p>
-                <Button className="w-full bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 text-white">
+                <Button className="w-full bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 text-white" onClick={() => setSelectedAnimal(animal)}>
                   Ver historia
                 </Button>
               </CardContent>
@@ -121,10 +131,33 @@ export function VisitorContent() {
         </div>
       </div>
 
+      {/* Modal para historia del animal, solo uno y centrado */}
+      {selectedAnimal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center relative animate-fade-in-up">
+            <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl" onClick={() => setSelectedAnimal(null)}>&times;</button>
+            <img src={selectedAnimal.image} alt={selectedAnimal.name} className="w-24 h-24 object-cover rounded-full mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-purple-700 mb-2">{selectedAnimal.name}</h2>
+            <p className="text-gray-700 mb-2">{selectedAnimal.age} • {selectedAnimal.breed}</p>
+            <p className="text-gray-800 mb-4">{selectedAnimal.description}</p>
+          </div>
+        </div>
+      )}
+      {/* Modal para historia de éxito */}
+      {selectedStory && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center relative animate-fade-in-up">
+            <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl" onClick={() => setSelectedStory(null)}>&times;</button>
+            <img src={selectedStory.image} alt={selectedStory.title} className="w-24 h-24 object-cover rounded-full mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-purple-700 mb-2">{selectedStory.title}</h2>
+            <p className="text-gray-800 mb-4">{selectedStory.content}</p>
+          </div>
+        </div>
+      )}
+
       {/* Success Stories */}
       <div className="mb-16 animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Historias de Éxito</h2>{" "}
-        {/* Changed text-white to text-gray-900 */}
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Historias de Éxito</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {successStories.map((story, index) => (
             <Card
@@ -140,7 +173,7 @@ export function VisitorContent() {
                 <CardContent className="p-6 flex-1">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">{story.title}</h3>
                   <p className="text-gray-600 mb-4">{story.content}</p>
-                  <Button variant="link" className="text-purple-600 hover:text-purple-700 p-0 h-auto">
+                  <Button variant="link" className="text-purple-600 hover:text-purple-700 p-0 h-auto" onClick={() => setSelectedStory(story)}>
                     Leer historia completa
                   </Button>
                 </CardContent>
@@ -151,10 +184,7 @@ export function VisitorContent() {
       </div>
 
       {/* How You Can Help */}
-      <div
-        className="bg-white/95 backdrop-blur-md rounded-xl p-8 mb-16 shadow-lg border border-white/20 animate-fade-in-up"
-        style={{ animationDelay: "0.6s" }}
-      >
+      <div className="bg-white/95 backdrop-blur-md rounded-xl p-8 mb-16 shadow-lg border border-white/20 animate-fade-in-up" style={{ animationDelay: "0.6s" }}>
         <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">¿Cómo Puedes Ayudar?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="bg-white border-purple-100">
@@ -166,7 +196,7 @@ export function VisitorContent() {
               <p className="text-gray-600 mb-4">
                 Brinda un hogar amoroso a un gatito o perrito que lo necesita y cambia dos vidas para siempre.
               </p>
-              <Button variant="link" className="text-purple-600 hover:text-purple-700">
+              <Button variant="link" className="text-purple-600 hover:text-purple-700" onClick={() => navigate('/proceso-adopcion')}>
                 Proceso de adopción
               </Button>
             </CardContent>
@@ -181,7 +211,7 @@ export function VisitorContent() {
               <p className="text-gray-600 mb-4">
                 Dona tu tiempo y cariño. Los gatitos y perritos necesitan paseos, juegos y socialización.
               </p>
-              <Button variant="link" className="text-purple-600 hover:text-purple-700">
+              <Button variant="link" className="text-purple-600 hover:text-purple-700" onClick={() => navigate('/voluntariado')}>
                 Únete como voluntario
               </Button>
             </CardContent>
@@ -196,7 +226,7 @@ export function VisitorContent() {
               <p className="text-gray-600 mb-4">
                 Tus donaciones nos ayudan a proporcionar alimento, atención médica y refugio.
               </p>
-              <Button variant="link" className="text-purple-600 hover:text-purple-700">
+              <Button variant="link" className="text-purple-600 hover:text-purple-700" onClick={() => navigate('/donaciones')}>
                 Hacer una donación
               </Button>
             </CardContent>
@@ -253,10 +283,7 @@ export function VisitorContent() {
       </div>
 
       {/* Newsletter */}
-      <div
-        className="bg-white/95 backdrop-blur-md rounded-xl p-8 text-center shadow-lg border border-white/20 animate-fade-in-up"
-        style={{ animationDelay: "1s" }}
-      >
+      <div className="bg-white/95 backdrop-blur-md rounded-xl p-8 text-center shadow-lg border border-white/20 animate-fade-in-up" style={{ animationDelay: "1s" }}>
         <div className="w-12 h-12 bg-gradient-to-r from-purple-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <MessageCircle className="h-6 w-6 text-purple-600" />
         </div>
@@ -277,5 +304,5 @@ export function VisitorContent() {
         </div>
       </div>
     </main>
-  )
+  );
 }

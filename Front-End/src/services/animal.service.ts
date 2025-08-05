@@ -8,11 +8,17 @@ export async function fetchAnimals() {
   return res.json();
 }
 
-export async function createAnimal(data) {
+export async function createAnimal(data: Record<string, any>) {
   const formData = new FormData();
   for (const key in data) {
-    if (data[key] !== undefined && data[key] !== null) {
-      formData.append(key, data[key]);
+    const value = data[key];
+    if (value !== undefined && value !== null) {
+      // Si es objeto/array y no es File, convertir a string
+      if (typeof value === "object" && !(value instanceof File)) {
+        formData.append(key, JSON.stringify(value));
+      } else {
+        formData.append(key, value);
+      }
     }
   }
   const res = await fetch(API_URL, {
@@ -23,7 +29,7 @@ export async function createAnimal(data) {
   return res.json();
 }
 
-export async function updateAnimal(id, data) {
+export async function updateAnimal(id: string, data: Record<string, any>) {
   const formData = new FormData();
   for (const key in data) {
     if (data[key] !== undefined && data[key] !== null) {
@@ -38,7 +44,7 @@ export async function updateAnimal(id, data) {
   return res.json();
 }
 
-export async function deleteAnimal(id) {
+export async function deleteAnimal(id: string) {
   const res = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
   });
@@ -46,7 +52,7 @@ export async function deleteAnimal(id) {
   return res.json();
 }
 
-export async function getAnimalByIdOrName(query) {
+export async function getAnimalByIdOrName(query: string) {
   const res = await fetch(`${API_URL}/search?q=${encodeURIComponent(query)}`);
   if (!res.ok) throw new Error("No se encontró el animal");
   return res.json();
